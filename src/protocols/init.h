@@ -2,6 +2,8 @@
 
 #include "../protocol_config.h"
 #include "none.h"
+#include "not.h"
+#include "xor.h"
 
 namespace unimess_protocols {
 

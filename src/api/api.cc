@@ -5,8 +5,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <exception>
+#include <time.h>
 
 extern "C" void unimess_init() {
+    srand(time(0));
+
     unimess_protocols::init();
 }
 

@@ -1,6 +1,6 @@
 FLAGS := -O3 -fPIC
 CXXFLAGS := $(FLAGS) -std=c++14
-OBJS := unimess.o protocol_config.o
+OBJS := unimess.o protocol_config.o chain.o
 
 all: core protocols api
 

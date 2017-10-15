@@ -32,6 +32,10 @@ public:
         pos = 0;
     }
 
+    bool at_end() {
+        return pos >= data.size();
+    }
+
     const std::vector<unsigned char>& get_data() const {
         return data;
     }

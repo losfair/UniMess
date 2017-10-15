@@ -1,8 +1,10 @@
 #include "../protocols/init.h"
 #include "../chain.h"
 #include "../packet.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <exception>
 
 extern "C" void unimess_init() {
     unimess_protocols::init();
@@ -25,10 +27,17 @@ extern "C" unsigned char * unimess_config_chain_dump(unimess::ConfigChain *cc, u
 extern "C" unimess::ConfigChain * unimess_config_chain_load(unsigned char *raw_data, unsigned int len) {
     std::vector<unsigned char> data;
     for(int i = 0; i < len; i++) {
-        data[i] = raw_data[i];
+        data.push_back(raw_data[i]);
     }
-    unimess::ConfigChain *cc = new unimess::ConfigChain(unimess::ConfigChain::load(data));
-    return cc;
+
+    try {
+        auto cc_local = unimess::ConfigChain::load(data);
+        unimess::ConfigChain *cc = new unimess::ConfigChain(std::move(cc_local));
+        return cc;
+    } catch(std::exception& e) {
+        fprintf(stderr, "unimess_config_chain_load: %s\n", e.what());
+        return NULL;
+    }
 }
 
 extern "C" void unimess_config_chain_destroy(unimess::ConfigChain *cc) {
@@ -43,7 +52,14 @@ extern "C" unimess::ProtocolChain * unimess_config_chain_get_protocol_chain(unim
 extern "C" unsigned char * unimess_protocol_chain_encode_packet(unimess::ProtocolChain *pc, unsigned int *len_out, unsigned char *pkt, unsigned int len) {
     std::vector<unsigned char> _data(pkt, pkt + len);
     unimess::Packet data(std::move(_data));
-    pc -> encode_packet(data);
+
+    try {
+        pc -> encode_packet(data);
+    } catch(std::exception& e) {
+        fprintf(stderr, "unimess_protocol_chain_encode_packet: %s\n", e.what());
+        *len_out = 0;
+        return NULL;
+    }
 
     unsigned char *raw_data = (unsigned char *) malloc(data.data.size());
     memcpy(raw_data, &data.data[0], data.data.size());
@@ -55,7 +71,14 @@ extern "C" unsigned char * unimess_protocol_chain_encode_packet(unimess::Protoco
 extern "C" unsigned char * unimess_protocol_chain_decode_packet(unimess::ProtocolChain *pc, unsigned int *len_out, unsigned char *pkt, unsigned int len) {
     std::vector<unsigned char> _data(pkt, pkt + len);
     unimess::Packet data(std::move(_data));
-    pc -> decode_packet(data);
+
+    try {
+        pc -> decode_packet(data);
+    } catch(std::exception& e) {
+        fprintf(stderr, "unimess_protocol_chain_decode_packet: %s\n", e.what());
+        *len_out = 0;
+        return NULL;
+    }
 
     unsigned char *raw_data = (unsigned char *) malloc(data.data.size());
     memcpy(raw_data, &data.data[0], data.data.size());

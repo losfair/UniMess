@@ -4,6 +4,7 @@
 #include "none.h"
 #include "not.h"
 #include "xor.h"
+#include "xorchain.h"
 
 namespace unimess_protocols {
 

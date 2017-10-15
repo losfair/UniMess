@@ -1,11 +1,12 @@
 FLAGS := -O3 -fPIC
 CXXFLAGS := $(FLAGS) -std=c++14
 OBJS := unimess.o protocol_config.o chain.o
+EXT_OBJS := protocols/*.o api/*.o
 
 all: core protocols api
+	$(CXX) $(FLAGS) -shared -o ../target/libunimess.so $(OBJS) $(EXT_OBJS)
 
 core: $(OBJS)
-	$(CXX) $(FLAGS) -shared -o ../target/libunimess.so $(OBJS)
 
 protocols:
 	make -C protocols

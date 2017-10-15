@@ -11,7 +11,10 @@ ConfigChain ConfigChain::generate(unsigned int size) {
 }
 
 std::vector<unsigned char> ConfigChain::dump() {
-    std::vector<unsigned char> ret;
+    BinaryData header_writer;
+    header_writer.write_string("UNIMESS_V1");
+
+    std::vector<unsigned char> ret = header_writer.get_data();
     for(auto& c : elements) {
         auto d = c -> dump();
         ret.insert(ret.end(), d.begin(), d.end());
@@ -22,6 +25,11 @@ std::vector<unsigned char> ConfigChain::dump() {
 ConfigChain ConfigChain::load(const std::vector<unsigned char>& data) {
     BinaryData reader(data);
     ConfigChain ret;
+
+    auto header = reader.read_string();
+    if(header != "UNIMESS_V1") {
+        throw std::runtime_error("Invalid data header");
+    }
 
     while(!reader.at_end()) {
         ret.elements.push_back(BaseProtocolConfig::parse(reader));

@@ -99,6 +99,41 @@ public:
 
         pos += len;
     }
+
+    std::string read_short_string() {
+        unsigned int len = read_primitive<unsigned char>();
+
+        if(len == 0) {
+            return std::string("");
+        }
+
+        if(pos + len > data.size()) {
+            throw std::runtime_error("short string read out of bound");
+        }
+
+        std::string ret(reinterpret_cast<const char *>(&data[pos]), len);
+        pos += len;
+        return ret;
+    }
+
+    void write_short_string(const std::string& s) {
+        unsigned int len = s.size();
+        if(len > 255) {
+            throw std::runtime_error("string too long for short type");
+        }
+
+        write_primitive((unsigned char) len);
+
+        while(pos + len > data.size()) {
+            data.push_back(0);
+        }
+
+        for(int i = 0; i < len; i++) {
+            data[pos + i] = s[i];
+        }
+
+        pos += len;
+    }
 };
 
 } // namespace unimess

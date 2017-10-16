@@ -12,7 +12,7 @@ ConfigChain ConfigChain::generate(unsigned int size) {
 
 std::vector<unsigned char> ConfigChain::dump() {
     BinaryData header_writer;
-    header_writer.write_string("UNIMESS_V1");
+    header_writer.write_short_string("UM_V2");
 
     std::vector<unsigned char> ret = header_writer.get_data();
     for(auto& c : elements) {
@@ -26,8 +26,8 @@ ConfigChain ConfigChain::load(const std::vector<unsigned char>& data) {
     BinaryData reader(data);
     ConfigChain ret;
 
-    auto header = reader.read_string();
-    if(header != "UNIMESS_V1") {
+    auto header = reader.read_short_string();
+    if(header != "UM_V2") {
         throw std::runtime_error("Invalid data header");
     }
 

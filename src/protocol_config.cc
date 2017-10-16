@@ -8,7 +8,7 @@ static std::map<std::string, ProtocolConfigManager> pc_managers;
 std::unique_ptr<BaseProtocolConfig> BaseProtocolConfig::parse(
     BinaryData& config_data
 ) {
-    auto name = config_data.read_string();
+    auto name = config_data.read_short_string();
     if(pc_managers.find(name) == pc_managers.end()) {
         throw std::runtime_error("Manager not found");
     }
@@ -47,7 +47,7 @@ void BaseProtocolConfig::add_manager(const std::string& name, const ProtocolConf
 
 std::vector<unsigned char> BaseProtocolConfig::dump() {
     BinaryData ret;
-    ret.write_string(get_name());
+    ret.write_short_string(get_name());
 
     std::vector<unsigned char> full_data = ret.get_data();
     auto body = do_dump();

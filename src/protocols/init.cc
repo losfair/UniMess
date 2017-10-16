@@ -9,6 +9,7 @@ void init() {
     unimess::BaseProtocolConfig::add_manager("xor", XorProtocolConfig::get_manager());
     unimess::BaseProtocolConfig::add_manager("xorchain", XorChainProtocolConfig::get_manager());
     unimess::BaseProtocolConfig::add_manager("swap", SwapProtocolConfig::get_manager());
+    unimess::BaseProtocolConfig::add_manager("deriv", DerivProtocolConfig::get_manager());
 }
 
 } // namespace unimess_protocols

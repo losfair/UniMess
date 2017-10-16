@@ -6,6 +6,7 @@
 #include "xor.h"
 #include "xorchain.h"
 #include "swap.h"
+#include "deriv.h"
 
 namespace unimess_protocols {
 

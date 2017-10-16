@@ -1,5 +1,7 @@
 import core
 import argparse
+import datetime
+import uuid
 
 def print_buf(buf, len):
     data = [buf[i] for i in range(len)]
@@ -13,7 +15,10 @@ def test(data):
     core.lib.unimess_config_chain_destroy(cc)
     print("Load OK")
 
-    test_input = "Hello world".encode()
+    test_input = (
+        "Hello world " + str(datetime.datetime.now())
+        + " " + str(uuid.uuid4())
+    ).encode()
     #print(test_input)
 
     enc_out_len = core.ffi.new("unsigned int *")

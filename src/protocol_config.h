@@ -28,6 +28,8 @@ protected:
     virtual BinaryData do_dump() = 0;
 
 public:
+    virtual ~BaseProtocolConfig() {}
+
     static std::unique_ptr<BaseProtocolConfig> parse(BinaryData& config_data);
     static std::unique_ptr<BaseProtocolConfig> generate_one();
     static const std::map<std::string, ProtocolConfigManager>& get_managers();

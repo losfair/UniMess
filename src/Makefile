@@ -1,5 +1,5 @@
-FLAGS := -O3 -fPIC
-CXXFLAGS := $(FLAGS) -std=c++14 -flto
+FLAGS := -O3 -fPIC -flto
+CXXFLAGS := $(FLAGS) -std=c++14
 OBJS := unimess.o protocol_config.o chain.o
 EXT_OBJS := protocols/*.o api/*.o
 
